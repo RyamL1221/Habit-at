@@ -1,0 +1,985 @@
+{
+  "pbtResults": {
+    "3.3 Write property tests for `growthStage.ts` in `src/lib/__tests__/growthStage.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1788296630866
+    },
+    "3.5 Write property tests for `coinLogic.ts` in `src/lib/__tests__/coinLogic.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1788296952149
+    },
+    "3.12 Write property tests for `calendarLogic.ts` in `src/lib/__tests__/calendarLogic.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1788296954071
+    },
+    "3.10 Write property tests for habit validation in `src/lib/__tests__/habitValidation.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1788297032996
+    },
+    "5.3 Write property tests for wilting logic in `src/lib/__tests__/wiltingLogic.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1788297702225
+    },
+    "5.5 Write property tests for accessory logic in `src/lib/__tests__/accessoryLogic.test.ts`": {
+      "status": "passed",
+      "lastRunTimestamp": 1788297705501
+    },
+    "5.2 Write property tests for habit toggle in `src/lib/__tests__/habitToggle.test.ts` (drive store actions directly)": {
+      "status": "passed",
+      "lastRunTimestamp": 1788297718118
+    }
+  },
+  "executionHistory": {
+    "1. Install dependencies and configure testing framework": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293536751
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293544708
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293867847
+      }
+    ],
+    "2.1 Create `src/lib/types.ts` with `GrowthStage`, `DayCompletionStatus`, `Habit`, `DayRecord`, `AccessoryCategory`, `Accessory`, `AccessoryOwnership` interfaces exactly as specified in the design": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293536809
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293871752
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294214350
+      }
+    ],
+    "2.2 Create `src/constants/accessories.ts` with the static accessory catalogue — at least 3 Hats, 3 Furniture, and 3 Terrain entries, each with id, name, category, coinCost, and renderLayer": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293536842
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293874876
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294217013
+      }
+    ],
+    "3.1 Create `src/lib/dateUtils.ts` — implement `today()`, `isSameDay(a, b)`, and `localDateKey(date)` returning `\"YYYY-MM-DD\"` in local timezone": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293536874
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294220390
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788295567834
+      }
+    ],
+    "3.2 Create `src/lib/growthStage.ts` — implement `computeGrowthStage(completedDays: number): GrowthStage` with clamp to `Math.max(0, n)` and thresholds [0–3]=seedling, [4–7]=sprout, [8–13]=bloom, [≥14]=flourishing": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293536906
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294222711
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788295570782
+      }
+    ],
+    "3.3 Write property tests for `growthStage.ts` in `src/lib/__tests__/growthStage.test.ts`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293536939
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788295965948
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297044401
+      }
+    ],
+    "3.4 Create `src/lib/coinLogic.ts` — implement `computeCoinDelta(action, celebrationWasTriggered, isThirdHabit): number` returning +5/-5 for normal toggle and +15/-15 for third-habit / celebration reversal; minimum clamp applied at call site": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293536971
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294225137
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788295575067
+      }
+    ],
+    "3.5 Write property tests for `coinLogic.ts` in `src/lib/__tests__/coinLogic.test.ts`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537003
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788296570878
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297046869
+      }
+    ],
+    "3.6 Create `src/lib/streakLogic.ts` — implement `evaluateStreak(currentStreak, lastDayRecord, today): { newStreak, resetOccurred }` and `computeDayStatus(completedIds, habitIds): DayCompletionStatus`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537052
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294227432
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788295578364
+      }
+    ],
+    "3.7 Write property tests for `streakLogic.ts` in `src/lib/__tests__/streakLogic.test.ts`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537080
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788296573025
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297050681
+      }
+    ],
+    "3.8 Create `src/lib/statusCaption.ts` — implement `computeStatusCaption(completedCount, isWilting, growthStageJustChanged, newStage): string` returning the exact caption strings from Requirements 7.5–7.11": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537111
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294229694
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788295581607
+      }
+    ],
+    "3.9 Create `src/lib/habitValidation.ts` — implement `validateHabitName(name: string): { valid: boolean; error?: string }` rejecting empty/whitespace and strings longer than 60 chars with the exact error strings from Requirements 1.4–1.5": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537140
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294232034
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788295960706
+      }
+    ],
+    "3.10 Write property tests for habit validation in `src/lib/__tests__/habitValidation.test.ts`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537171
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788296575426
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297053063
+      }
+    ],
+    "3.11 Create `src/lib/calendarLogic.ts` — implement `computeCellStatus(record: DayRecord | undefined, dateKey: string, today: string): 'complete' | 'partial' | 'empty' | 'future'`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537202
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294234492
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788295963238
+      }
+    ],
+    "3.12 Write property tests for `calendarLogic.ts` in `src/lib/__tests__/calendarLogic.test.ts`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537233
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788296577921
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297055990
+      }
+    ],
+    "4. Checkpoint — pure logic tests": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537262
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297058730
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297086575
+      }
+    ],
+    "5.1 Create `src/store/useHabitStore.ts` with the full `HabitState` shape, Zustand `persist` middleware backed by `@react-native-async-storage/async-storage` (key `habrite-habit-store`), and all actions: `toggleHabit`, `saveHabit`, `evaluateDayOnOpen`, `dismissCelebration`, `setHydrated`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537295
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297089379
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297619912
+      }
+    ],
+    "5.2 Write property tests for habit toggle in `src/lib/__tests__/habitToggle.test.ts` (drive store actions directly)": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537327
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297627753
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297734454
+      }
+    ],
+    "5.3 Write property tests for wilting logic in `src/lib/__tests__/wiltingLogic.test.ts`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537359
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297630493
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297739434
+      }
+    ],
+    "5.4 Create `src/store/useAccessoryStore.ts` with `AccessoryState` shape, Zustand `persist` (key `habrite-accessory-store`), and actions: `purchaseAccessory`, `equipAccessory`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537397
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297188934
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297624338
+      }
+    ],
+    "5.5 Write property tests for accessory logic in `src/lib/__tests__/accessoryLogic.test.ts`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537441
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297633303
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297742281
+      }
+    ],
+    "5.6 Write property tests for persistence round-trip in `src/lib/__tests__/persistence.test.ts`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537472
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297636333
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297746259
+      }
+    ],
+    "6. Checkpoint — store layer": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537501
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297748950
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297778189
+      }
+    ],
+    "7.1 Restructure `src/app/` to the design layout: create `src/app/(tabs)/_layout.tsx`, `src/app/(tabs)/index.tsx` (Home stub), `src/app/(tabs)/wardrobe.tsx` (stub), `src/app/(tabs)/stats.tsx` (stub), and `src/app/settings.tsx` (stub pushed screen)": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537533
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297789660
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297865368
+      }
+    ],
+    "7.2 Rewrite `src/app/_layout.tsx` to implement the boot sequence: `SplashScreen.preventAutoHideAsync()`, hydration guard via `useHabitStore._hasHydrated`, call `evaluateDayOnOpen(today())` on first hydration, `SplashScreen.hideAsync()` on success or after 5 s timeout with warning banner": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537564
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297868978
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298022651
+      }
+    ],
+    "7.3 Create `src/components/navigation/BottomNav.tsx` — three tab items (Home / flame icon, Wardrobe / hanger icon, Stats / calendar icon) with active-state styling, coin balance display next to coin icon, reads live from `useHabitStore.coinBalance`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537596
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298025944
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298369711
+      }
+    ],
+    "8.1 Create `src/components/sprig/SprigSeedling.tsx`, `SprigSprout.tsx`, `SprigBloom.tsx`, `SprigFlourishing.tsx` — each is a layered SVG composition with `<G>` body, detail, and leaf layers; accept `wilting: boolean` prop; apply `<ColorMatrix>` desaturation filter when `wilting=true`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537628
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298373328
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298503593
+      }
+    ],
+    "8.2 Create `src/components/sprig/Sprig.tsx` — selects the correct stage component from `stage` prop, passes `wilting` prop, owns idle bob animation via `useSharedValue` + `withRepeat(withSequence(...), -1)` over 3000 ms on `translateY` (0 → -6 → 0)": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537661
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298507235
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298554713
+      }
+    ],
+    "8.3 Create `src/components/terrarium/TerrariumScene.tsx` — layered absolute-positioned Views in order: SkyGradient (`expo-linear-gradient`), TerrainAccessory slot, GroundMound (SVG ellipse), FurnitureAccessory slots, Sprig, HatAccessory slot; reads equipped accessories from `useAccessoryStore`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537694
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298561037
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298640599
+      }
+    ],
+    "8.4 Create `src/components/terrarium/Terrarium.tsx` — wraps `TerrariumScene` with wood-frame border (rounded corners, styled border), `overflow: 'hidden'` for sparkle clipping; accepts `height` and `showCelebration` props": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537724
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298652961
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298794744
+      }
+    ],
+    "8.5 Create `src/components/terrarium/StatusCaption.tsx` — renders a single italic `<Text>` line; derives text from `computeStatusCaption` fed by live store values": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537757
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298563935
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298644979
+      }
+    ],
+    "9.1 Create `src/components/checklist/HabitRow.tsx` — leaf-shaped SVG checkbox (filled with primary accent when completed), label with `textDecorationLine: 'line-through'` when completed, Reanimated micro-bounce on toggle (scale + opacity, 100 ms); accepts `habit`, `completed`, `onToggle` props": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537788
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298567695
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298648902
+      }
+    ],
+    "9.2 Create `src/components/checklist/Checklist.tsx` — renders three `HabitRow` items driven by `useHabitStore`; calls `toggleHabit` on each row's `onToggle`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537821
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298656274
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298798169
+      }
+    ],
+    "10.1 Create `src/components/celebration/SparkleOverlay.tsx` — 12 sparkle dots randomly positioned within `containerDimensions`; each uses `withRepeat(withSequence(scale 0→1.5→0, opacity 1→0))` with stagger; auto-stops after 2000 ms via `withDelay` callback; clipped by parent `overflow: 'hidden'`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537853
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298659980
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298801915
+      }
+    ],
+    "10.2 Create `src/components/celebration/CelebrationToast.tsx` — `Animated.View` slides in from bottom (`translateY +100→0`) on `visible=true`; shows coins earned (25) and streak; auto-slides out after 3 s via `withDelay`; calls `onDismiss`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537886
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298664286
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298805577
+      }
+    ],
+    "10.3 Create `src/hooks/useCelebration.ts` — celebration state machine: exposes `active`, `trigger()`, and `dismiss()` driven by `useHabitStore.celebrationActive`; wires `dismissCelebration` store action": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537918
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298667644
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298809096
+      }
+    ],
+    "11. Checkpoint — UI layer": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537946
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298815019
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299277824
+      }
+    ],
+    "12.1 Create `src/components/wardrobe/CategoryTabs.tsx` — three underline tabs (Hats, Furniture, Terrain); active tab underlined; default active = Hats": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293537982
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298820163
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299190277
+      }
+    ],
+    "12.2 Create `src/components/wardrobe/AccessoryItem.tsx` — renders locked (grayscale + lock icon + price), owned, or equipped (amber outline) states based on `AccessoryState` prop; accepts `accessory`, `state`, `coinBalance`, `onPress`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538016
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298823843
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299194240
+      }
+    ],
+    "12.3 Create `src/components/wardrobe/WardrobeShelf.tsx` — scrollable list of `AccessoryItem` rows for the active category, separated by thin walnut-brown divider lines; reads `useAccessoryStore` ownerships and `useHabitStore.coinBalance`; handles tap → purchase confirmation prompt or equip action": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538048
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299282202
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299390162
+      }
+    ],
+    "12.4 Assemble `src/app/(tabs)/wardrobe.tsx` — mini Terrarium preview at top (same Terrarium + Sprig components), `CategoryTabs`, `WardrobeShelf`; purchase confirmation uses a `Modal` or `Alert` showing accessory name and cost": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538080
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299405718
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299611570
+      }
+    ],
+    "13.1 Create `src/components/stats/CalendarGrid.tsx` — 7-column month grid; uses `computeCellStatus` for each day cell; colors: solid accent = complete, 50% opacity = partial, empty = missed/no-record, distinct outline = today, no fill = future; prev/next month navigation controls": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538113
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298827339
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299198285
+      }
+    ],
+    "13.2 Create `src/components/stats/StatsSummary.tsx` — summary row with current streak and cumulative completed days from `useHabitStore`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538150
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298831748
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299201461
+      }
+    ],
+    "13.3 Assemble `src/app/(tabs)/stats.tsx` — `CalendarGrid` and `StatsSummary`; accessible via Bottom_Nav as the third tab": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538182
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299285455
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299393675
+      }
+    ],
+    "14.1 Create `src/hooks/useNotifications.ts` — `checkPermissions()`, `requestPermissions()`, `scheduleHabitReminder(habit): Promise<string>` using `expo-notifications` with `CalendarTriggerInput { hour, minute, repeats: true }`, `cancelHabitReminder(notificationId)`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538215
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298836614
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299206313
+      }
+    ],
+    "14.2 Assemble `src/app/settings.tsx` — three editable text fields (60-char max) for habit names, notifications toggle (calls `requestPermissions` when turned on, shows inline message on denial), Save button wired to `validateHabitName` + `saveHabit`; inline validation errors per Requirements 1.4, 1.5, 12.7": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538250
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299289158
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299397639
+      }
+    ],
+    "15.1 Assemble `src/app/(tabs)/index.tsx` — fixed header row with settings icon (navigates to `settings`) and streak indicator (flame icon + streak count); Terrarium occupying ≥40% screen height fixed at top; `StatusCaption` immediately below; scrollable area containing `Checklist`; `SparkleOverlay` and `CelebrationToast` mounted conditionally on `celebrationActive`; wire `useDayCheck` on mount": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538286
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299409470
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299615691
+      }
+    ],
+    "15.2 Create `src/hooks/useDayCheck.ts` — calls `evaluateDayOnOpen(today())` on app focus/mount; guards against duplicate evaluation on the same day using `localDateKey`": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538319
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299210133
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299271332
+      }
+    ],
+    "16.1 Create `src/components/WarningBanner.tsx` — non-blocking dismissible banner; shown by `useHabitStore` when a Store write fails (Requirement 2.8) or on timeout during hydration (Requirement 13.3)": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538352
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299213551
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299274914
+      }
+    ],
+    "16.2 Add AsyncStorage write-failure handler in `useHabitStore` — catch errors from persist middleware and set a `storeWriteError` flag that triggers `WarningBanner` display": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538385
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299292541
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299400968
+      }
+    ],
+    "17. Final checkpoint — integration": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788293538418
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299619749
+      },
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299694329
+      }
+    ],
+    "2. Define core TypeScript types and static accessory catalogue": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788294217046
+      }
+    ],
+    "3. Implement pure business logic functions": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297056040
+      }
+    ],
+    "5. Implement Zustand stores": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788297746311
+      }
+    ],
+    "7. Navigation skeleton and root layout": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298369753
+      }
+    ],
+    "8. Terrarium and Sprig SVG components": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298794791
+      }
+    ],
+    "9. Checklist and HabitRow": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298798212
+      }
+    ],
+    "10. Celebration components": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788298809133
+      }
+    ],
+    "13. Stats screen": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299393716
+      }
+    ],
+    "14. Settings screen and notifications hook": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299397674
+      }
+    ],
+    "16. Error handling and warning banner": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299401003
+      }
+    ],
+    "12. Wardrobe screen": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299611614
+      }
+    ],
+    "15. Home screen assembly": [
+      {
+        "executionId": "9088b5f6-318c-48c4-927c-edf8b708d8f4",
+        "chatSessionId": "sess_965402fc-01bd-4d92-8fee-8f5339edfac1",
+        "timestamp": 1788299615732
+      }
+    ]
+  }
+}
