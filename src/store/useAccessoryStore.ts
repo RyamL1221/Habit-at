@@ -1,9 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import type { AccessoryOwnership } from '../lib/types';
 import { ACCESSORIES } from '../constants/accessories';
+import type { AccessoryOwnership } from '../lib/types';
 import { useHabitStore } from './useHabitStore';
 
 // ---------------------------------------------------------------------------
@@ -21,6 +21,24 @@ export interface AccessoryState {
   purchaseAccessory: (accessoryId: string) => void;
   equipAccessory: (accessoryId: string) => void;
 }
+
+/**
+ * During Expo's static web render there is no `window`, and AsyncStorage's web
+ * implementation throws `ReferenceError: window is not defined` on any access.
+ * There is nothing to persist to on the server, so we skip storage entirely in
+ * that environment. In a real browser or on native, `window` exists (native RN
+ * provides a global), so persistence is unaffected.
+ */
+const HAS_BROWSER_STORAGE = typeof window !== 'undefined';
+
+const accessoryStorage = {
+  getItem: (name: string): Promise<string | null> =>
+    HAS_BROWSER_STORAGE ? AsyncStorage.getItem(name) : Promise.resolve(null),
+  setItem: (name: string, value: string): Promise<void> =>
+    HAS_BROWSER_STORAGE ? AsyncStorage.setItem(name, value) : Promise.resolve(),
+  removeItem: (name: string): Promise<void> =>
+    HAS_BROWSER_STORAGE ? AsyncStorage.removeItem(name) : Promise.resolve(),
+};
 
 export const useAccessoryStore = create<AccessoryState>()(
   persist(
@@ -88,7 +106,7 @@ export const useAccessoryStore = create<AccessoryState>()(
     }),
     {
       name: 'habrite-accessory-store',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => accessoryStorage),
     }
   )
 );

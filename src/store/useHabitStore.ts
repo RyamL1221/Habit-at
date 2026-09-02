@@ -52,6 +52,34 @@ export interface HabitState {
 }
 
 /**
+ * True only in a real browser (or a native RN JS runtime that shims `window`).
+ * During Expo's static web render (`web.output: "static"`), route HTML is
+ * generated in a bare Node process where `window` is undefined. AsyncStorage's
+ * web implementation dereferences `window`, so any read/write throws
+ * `ReferenceError: window is not defined`. There is nothing to persist to
+ * during SSR anyway, so we detect this environment and skip storage entirely.
+ */
+const HAS_BROWSER_STORAGE = typeof window !== 'undefined';
+
+/**
+ * Flips the runtime-only `storeWriteError` flag without re-entering the persist
+ * write path.
+ *
+ * `storeWriteError` is excluded from `partialize`, but the zustand persist
+ * middleware still calls `setItem` on every `setState`. If a failed write's
+ * catch handler calls `setState` directly, that triggers another `setItem`,
+ * which fails again, which calls `setState` again — an infinite loop that
+ * spins CPU and grows memory until the process OOMs. Guarding on the flag's
+ * current value ensures we set it (and thus write) at most once per error
+ * episode, breaking the loop.
+ */
+function markWriteError(): void {
+  if (!useHabitStore.getState().storeWriteError) {
+    useHabitStore.setState({ storeWriteError: true });
+  }
+}
+
+/**
  * A thin wrapper around AsyncStorage that intercepts write failures.
  *
  * When `setItem` (or `removeItem`) throws, we swallow the error and flip the
@@ -60,29 +88,35 @@ export interface HabitState {
  * treats the write as "done", so the toggled state is retained in memory
  * (Req 2.8). Reads delegate straight through to AsyncStorage.
  *
+ * During static web render (no `window`), every method is a no-op stub so
+ * AsyncStorage is never touched — there is no persistence target on the server.
+ *
  * `useHabitStore` is referenced lazily inside the callbacks — they only run at
  * runtime, well after the store has finished initializing, so there is no TDZ
  * concern.
  */
 const wrappedStorage = {
   getItem: (name: string): Promise<string | null> => {
+    if (!HAS_BROWSER_STORAGE) return Promise.resolve(null);
     return AsyncStorage.getItem(name);
   },
   setItem: async (name: string, value: string): Promise<void> => {
+    if (!HAS_BROWSER_STORAGE) return;
     try {
       await AsyncStorage.setItem(name, value);
     } catch (error) {
       // Swallow — retain in-memory state and surface a warning (Req 2.8).
       console.warn('[habrite] Failed to persist store state:', error);
-      useHabitStore.setState({ storeWriteError: true });
+      markWriteError();
     }
   },
   removeItem: async (name: string): Promise<void> => {
+    if (!HAS_BROWSER_STORAGE) return;
     try {
       await AsyncStorage.removeItem(name);
     } catch (error) {
       console.warn('[habrite] Failed to remove persisted store state:', error);
-      useHabitStore.setState({ storeWriteError: true });
+      markWriteError();
     }
   },
 };
@@ -310,7 +344,7 @@ export const useHabitStore = create<HabitState>()(
         // Called after hydration completes (success or failure).
         if (error) {
           // Surface a non-blocking warning on read failure (Req 13.3 support).
-          useHabitStore.setState({ storeWriteError: true });
+          markWriteError();
         }
         // Mark hydration complete so the boot sequence can proceed (Req 13.2).
         useHabitStore.getState().setHydrated();
