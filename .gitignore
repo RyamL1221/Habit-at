@@ -41,3 +41,8 @@ example
 # generated native folders
 /ios
 /android
+
+# build/export logs and output (never commit these)
+*.log
+.expo-export*/
+export-*.log
