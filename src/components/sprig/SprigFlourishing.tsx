@@ -1,4 +1,4 @@
-import Svg, {
+﻿import Svg, {
   Circle,
   Defs,
   Ellipse,
@@ -6,118 +6,74 @@ import Svg, {
   Filter,
   G,
   Path,
+  Rect,
 } from 'react-native-svg';
 
 import { SPRIG_COLORS, SPRIG_VIEWBOX, SprigStageProps, WILT_FILTER_ID } from './types';
 
+/** A small five-petal flower centered at (cx, cy). */
+function Flower({ cx, cy, r = 3 }: { cx: number; cy: number; r?: number }) {
+  return (
+    <G>
+      <Circle cx={cx} cy={cy} r={r} fill={SPRIG_COLORS.flowerPink} />
+      <Circle cx={cx - r * 1.3} cy={cy + r * 0.75} r={r * 0.9} fill={SPRIG_COLORS.flowerPink} />
+      <Circle cx={cx + r * 1.3} cy={cy + r * 0.75} r={r * 0.9} fill={SPRIG_COLORS.flowerPink} />
+      <Circle cx={cx - r * 0.8} cy={cy - r * 0.9} r={r * 0.9} fill={SPRIG_COLORS.flowerPink} />
+      <Circle cx={cx + r * 0.8} cy={cy - r * 0.9} r={r * 0.9} fill={SPRIG_COLORS.flowerPink} />
+      <Circle cx={cx} cy={cy} r={r * 0.6} fill={SPRIG_COLORS.flowerYellow} />
+    </G>
+  );
+}
+
 /**
  * Stage 3 — Flourishing.
- * A full, lush plant with many leaves and multiple flowers.
+ * The fullest blob creature: a lush sprout with several flowers and rosy cheeks.
  */
 export default function SprigFlourishing({ wilting, size = 160 }: SprigStageProps) {
-  const droop = wilting ? 26 : 0;
+  const sproutTilt = wilting ? -12 : 6;
+  const smilePath = wilting ? 'M43 68 Q50 70 57 68' : 'M43 67 Q50 74 57 67';
 
   return (
     <Svg width={size} height={size} viewBox={SPRIG_VIEWBOX}>
       <Defs>
         <Filter id={WILT_FILTER_ID}>
-          <FeColorMatrix type="saturate" values="0.2" />
+          <FeColorMatrix type="saturate" values="0.25" />
         </Filter>
       </Defs>
 
+      <Ellipse cx="50" cy="87" rx="40" ry="10.5" fill={SPRIG_COLORS.ground} />
+
       <G filter={wilting ? `url(#${WILT_FILTER_ID})` : undefined}>
-        {/* Body layer: wide mound + main stem */}
-        <G>
-          <Ellipse cx="50" cy="92" rx="28" ry="7" fill={SPRIG_COLORS.leafDark} />
+        {/* Lush sprout: stalk, leaves, and three flowers. */}
+        <G transform={`rotate(${sproutTilt} 52 38)`}>
           <Path
-            d="M50 90 C 44 62, 44 40, 50 26 C 56 40, 56 62, 50 90 Z"
-            fill={SPRIG_COLORS.stem}
+            d="M52 54 C 51 42, 51 32, 52 26"
+            stroke={SPRIG_COLORS.stalk}
+            strokeWidth={2.8}
+            strokeLinecap="round"
+            fill="none"
           />
+          <Ellipse cx="43" cy="42" rx="5.4" ry="3.2" fill={SPRIG_COLORS.leaf} transform="rotate(-32 43 42)" />
+          <Ellipse cx="61" cy="42" rx="5.4" ry="3.2" fill={SPRIG_COLORS.leaf} transform="rotate(32 61 42)" />
+          <Ellipse cx="46" cy="33" rx="4.6" ry="2.8" fill={SPRIG_COLORS.leaf} transform="rotate(-26 46 33)" />
+          <Ellipse cx="58" cy="33" rx="4.6" ry="2.8" fill={SPRIG_COLORS.leaf} transform="rotate(26 58 33)" />
+          <Flower cx={52} cy={24} r={3.2} />
+          <Flower cx={43} cy={30} r={2.6} />
+          <Flower cx={61} cy={30} r={2.6} />
         </G>
 
-        {/* Leaf layer: many leaves fanning out */}
-        <G>
-          <Ellipse
-            cx="32"
-            cy="70"
-            rx="14"
-            ry="6.5"
-            fill={SPRIG_COLORS.leafLight}
-            transform={`rotate(${-24 + droop} 32 70)`}
-          />
-          <Ellipse
-            cx="68"
-            cy="70"
-            rx="14"
-            ry="6.5"
-            fill={SPRIG_COLORS.leafLight}
-            transform={`rotate(${24 - droop} 68 70)`}
-          />
-          <Ellipse
-            cx="35"
-            cy="56"
-            rx="12"
-            ry="6"
-            fill={SPRIG_COLORS.leafDark}
-            transform={`rotate(${-28 + droop} 35 56)`}
-          />
-          <Ellipse
-            cx="65"
-            cy="56"
-            rx="12"
-            ry="6"
-            fill={SPRIG_COLORS.leafDark}
-            transform={`rotate(${28 - droop} 65 56)`}
-          />
-          <Ellipse
-            cx="38"
-            cy="44"
-            rx="10"
-            ry="5.5"
-            fill={SPRIG_COLORS.leafLight}
-            transform={`rotate(${-30 + droop} 38 44)`}
-          />
-          <Ellipse
-            cx="62"
-            cy="44"
-            rx="10"
-            ry="5.5"
-            fill={SPRIG_COLORS.leafLight}
-            transform={`rotate(${30 - droop} 62 44)`}
-          />
-        </G>
+        {/* Body: largest rounded blob. */}
+        <Rect x="30" y="50" width="40" height="35" rx="17.5" fill={SPRIG_COLORS.body} />
 
-        {/* Flower layer: multiple blooms */}
-        <G>
-          {/* Center flower */}
-          <Circle cx="50" cy="20" r="6" fill={SPRIG_COLORS.flowerPink} />
-          <Circle cx="43" cy="24" r="5" fill={SPRIG_COLORS.flowerPink} />
-          <Circle cx="57" cy="24" r="5" fill={SPRIG_COLORS.flowerPink} />
-          <Circle cx="46" cy="14" r="5" fill={SPRIG_COLORS.flowerPink} />
-          <Circle cx="54" cy="14" r="5" fill={SPRIG_COLORS.flowerPink} />
-          <Circle cx="50" cy="19" r="3.5" fill={SPRIG_COLORS.flowerYellow} />
+        {/* Rosy cheeks. */}
+        <Circle cx="37" cy="65" r="2.6" fill={SPRIG_COLORS.flowerPink} opacity={0.7} />
+        <Circle cx="63" cy="65" r="2.6" fill={SPRIG_COLORS.flowerPink} opacity={0.7} />
 
-          {/* Left flower */}
-          <Circle cx="30" cy="34" r="4" fill={SPRIG_COLORS.flowerYellow} />
-          <Circle cx="25" cy="37" r="3.4" fill={SPRIG_COLORS.flowerYellow} />
-          <Circle cx="35" cy="37" r="3.4" fill={SPRIG_COLORS.flowerYellow} />
-          <Circle cx="30" cy="30" r="3.4" fill={SPRIG_COLORS.flowerYellow} />
-          <Circle cx="30" cy="34" r="2.2" fill={SPRIG_COLORS.flowerPink} />
-
-          {/* Right flower */}
-          <Circle cx="70" cy="34" r="4" fill={SPRIG_COLORS.flowerYellow} />
-          <Circle cx="65" cy="37" r="3.4" fill={SPRIG_COLORS.flowerYellow} />
-          <Circle cx="75" cy="37" r="3.4" fill={SPRIG_COLORS.flowerYellow} />
-          <Circle cx="70" cy="30" r="3.4" fill={SPRIG_COLORS.flowerYellow} />
-          <Circle cx="70" cy="34" r="2.2" fill={SPRIG_COLORS.flowerPink} />
-        </G>
-
-        {/* Detail layer: cute eyes on the stem */}
-        <G>
-          <Circle cx="46" cy="40" r="3" fill={SPRIG_COLORS.eye} />
-          <Circle cx="54" cy="40" r="3" fill={SPRIG_COLORS.eye} />
-          <Circle cx="47.1" cy="39" r="1.1" fill={SPRIG_COLORS.eyeHighlight} />
-          <Circle cx="55.1" cy="39" r="1.1" fill={SPRIG_COLORS.eyeHighlight} />
+        {/* Face. */}
+        <G stroke={SPRIG_COLORS.face} strokeWidth={2} strokeLinecap="round" fill="none">
+          <Path d="M41 61 Q44.5 57.5 48 61" />
+          <Path d="M52 61 Q55.5 57.5 59 61" />
+          <Path d={smilePath} />
         </G>
       </G>
     </Svg>

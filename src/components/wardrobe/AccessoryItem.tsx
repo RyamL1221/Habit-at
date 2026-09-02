@@ -1,7 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+﻿import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 import type { Accessory } from '@/lib/types';
+
+import { AccessoryPreview } from './AccessoryPreview';
 
 export type AccessoryState = 'locked' | 'owned' | 'equipped';
 
@@ -19,19 +21,6 @@ const WALNUT = '#5C4433';
 /** Coin indicator gold. */
 const COIN_GOLD = '#E6B422';
 
-/**
- * A deterministic placeholder swatch color derived from the accessory id, so
- * each accessory has a stable colored circle until real art exists.
- */
-function swatchColor(id: string): string {
-  let hash = 0;
-  for (let i = 0; i < id.length; i += 1) {
-    hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
-  }
-  const hue = hash % 360;
-  return `hsl(${hue}, 55%, 65%)`;
-}
-
 function LockIcon() {
   return (
     <Svg width={16} height={16} viewBox="0 0 24 24" accessibilityLabel="locked">
@@ -47,10 +36,6 @@ export function AccessoryItem({ accessory, state, coinBalance, onPress }: Access
   const isLocked = state === 'locked';
   const isEquipped = state === 'equipped';
 
-  // Locked items are muted/grayscale-ish (art doesn't exist, so we desaturate
-  // the placeholder swatch to a neutral gray and dim the label).
-  const swatch = isLocked ? '#B8B8B8' : swatchColor(accessory.id);
-
   return (
     <Pressable
       onPress={onPress}
@@ -58,7 +43,8 @@ export function AccessoryItem({ accessory, state, coinBalance, onPress }: Access
       accessibilityState={{ selected: isEquipped, disabled: false }}
       style={[styles.row, isEquipped && styles.rowEquipped]}
     >
-      <View style={[styles.swatch, { backgroundColor: swatch }]} />
+      {/* Preview of what the accessory looks like. */}
+      <AccessoryPreview accessoryId={accessory.id} size={44} locked={isLocked} />
 
       <View style={styles.labelColumn}>
         <Text style={[styles.name, isLocked && styles.nameLocked]} numberOfLines={1}>
@@ -93,11 +79,6 @@ const styles = StyleSheet.create({
   },
   rowEquipped: {
     borderColor: AMBER,
-  },
-  swatch: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
   },
   labelColumn: {
     flex: 1,

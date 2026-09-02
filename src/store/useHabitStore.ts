@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+﻿import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -12,11 +12,11 @@ import type { DayRecord, GrowthStage, Habit } from '../lib/types';
 /**
  * The full persisted + runtime state for the Habrite habit store.
  *
- * Requirements: 1.1, 1.2, 2.2–2.7, 3.1, 3.2, 3.7, 3.8, 4.2–4.4,
- * 5.2, 5.7, 6.1, 6.2, 8.3–8.5, 13.1
+ * Requirements: 1.1, 1.2, 2.2â€“2.7, 3.1, 3.2, 3.7, 3.8, 4.2â€“4.4,
+ * 5.2, 5.7, 6.1, 6.2, 8.3â€“8.5, 13.1
  */
 export interface HabitState {
-  // Habit definitions — always exactly three (Req 1.1)
+  // Habit definitions â€” always exactly three (Req 1.1)
   habits: [Habit, Habit, Habit];
 
   // Per-day completion records, keyed by "YYYY-MM-DD" (Req 4.4, 13.1)
@@ -48,6 +48,9 @@ export interface HabitState {
   evaluateDayOnOpen: (today: string) => void;
   dismissCelebration: () => void;
   dismissStoreWriteError: () => void;
+  // Dev/testing helpers for the coin economy
+  grantCoins: (amount: number) => void;
+  resetCoins: () => void;
   setHydrated: () => void;
 }
 
@@ -68,7 +71,7 @@ const HAS_BROWSER_STORAGE = typeof window !== 'undefined';
  * `storeWriteError` is excluded from `partialize`, but the zustand persist
  * middleware still calls `setItem` on every `setState`. If a failed write's
  * catch handler calls `setState` directly, that triggers another `setItem`,
- * which fails again, which calls `setState` again — an infinite loop that
+ * which fails again, which calls `setState` again â€” an infinite loop that
  * spins CPU and grows memory until the process OOMs. Guarding on the flag's
  * current value ensures we set it (and thus write) at most once per error
  * episode, breaking the loop.
@@ -89,9 +92,9 @@ function markWriteError(): void {
  * (Req 2.8). Reads delegate straight through to AsyncStorage.
  *
  * During static web render (no `window`), every method is a no-op stub so
- * AsyncStorage is never touched — there is no persistence target on the server.
+ * AsyncStorage is never touched â€” there is no persistence target on the server.
  *
- * `useHabitStore` is referenced lazily inside the callbacks — they only run at
+ * `useHabitStore` is referenced lazily inside the callbacks â€” they only run at
  * runtime, well after the store has finished initializing, so there is no TDZ
  * concern.
  */
@@ -105,7 +108,7 @@ const wrappedStorage = {
     try {
       await AsyncStorage.setItem(name, value);
     } catch (error) {
-      // Swallow — retain in-memory state and surface a warning (Req 2.8).
+      // Swallow â€” retain in-memory state and surface a warning (Req 2.8).
       console.warn('[habrite] Failed to persist store state:', error);
       markWriteError();
     }
@@ -127,7 +130,7 @@ const DEFAULT_HABITS: [Habit, Habit, Habit] = [
   { id: 'habit-3', name: 'Habit 3', reminderTime: null, notificationId: null },
 ];
 
-/** Total number of habits — fixed at three (Req 1.1). */
+/** Total number of habits â€” fixed at three (Req 1.1). */
 const HABIT_COUNT = 3;
 
 /**
@@ -191,12 +194,12 @@ export const useHabitStore = create<HabitState>()(
           const isThirdHabit = newCompletedIds.length === HABIT_COUNT;
 
           if (isThirdHabit && !state.celebrationTriggeredToday) {
-            // Third-and-final habit completes today → celebration bonus (Req 3.1, 3.2)
+            // Third-and-final habit completes today â†’ celebration bonus (Req 3.1, 3.2)
             delta = computeCoinDelta('complete', false, true); // +15
             newStreak = state.streak + 1;
             celebrationActive = true;
             celebrationTriggeredToday = true;
-            // The day just became fully complete → count it (Req 5.2, 5.7)
+            // The day just became fully complete â†’ count it (Req 5.2, 5.7)
             cumulativeCompletedDays = state.cumulativeCompletedDays + 1;
           } else {
             // Normal habit completion (Req 2.6)
@@ -212,12 +215,12 @@ export const useHabitStore = create<HabitState>()(
           newCompletedIds = state.todayCompletedIds.filter((id) => id !== habitId);
 
           if (state.celebrationTriggeredToday) {
-            // Undo after celebration was triggered → reverse the full bonus (Req 3.7)
+            // Undo after celebration was triggered â†’ reverse the full bonus (Req 3.7)
             delta = computeCoinDelta('uncomplete', true, false); // -15
             newStreak = Math.max(0, state.streak - 1);
             celebrationActive = false;
             celebrationTriggeredToday = false;
-            // The day is no longer fully complete → uncount it
+            // The day is no longer fully complete â†’ uncount it
             cumulativeCompletedDays = Math.max(0, state.cumulativeCompletedDays - 1);
           } else {
             // Normal habit uncompletion (Req 2.7)
@@ -281,7 +284,7 @@ export const useHabitStore = create<HabitState>()(
         );
 
         // Wilting activates when the most recent recorded day was not fully
-        // complete (partial or missed) (Req 6.1). No prior day → no wilting (Req 6.6).
+        // complete (partial or missed) (Req 6.1). No prior day â†’ no wilting (Req 6.6).
         let isWilting = state.isWilting;
         if (lastRecord !== undefined && lastRecord.dateKey !== today) {
           isWilting = lastRecord.status !== 'complete';
@@ -320,6 +323,13 @@ export const useHabitStore = create<HabitState>()(
         set({ storeWriteError: false });
       },
 
+      grantCoins: (amount: number) => {
+        // Add coins to the balance, clamped to a minimum of 0 (Req 8.4).
+        set((state) => ({ coinBalance: Math.max(0, state.coinBalance + amount) }));
+      },
+      resetCoins: () => {
+        set({ coinBalance: 0 });
+      },
       setHydrated: () => {
         set({ _hasHydrated: true });
       },

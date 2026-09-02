@@ -1,4 +1,4 @@
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+﻿import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { AccessoryItem, type AccessoryState } from './AccessoryItem';
 import { ACCESSORIES } from '@/constants/accessories';
@@ -9,6 +9,8 @@ import { useHabitStore } from '@/store/useHabitStore';
 interface WardrobeShelfProps {
   category: AccessoryCategory;
   onRequestPurchase: (accessory: Accessory) => void;
+  /** Called when a locked item is tapped without enough coins (Req 9.12). */
+  onInsufficientFunds?: (accessory: Accessory) => void;
 }
 
 /** Thin walnut-brown hairline divider between shelf rows (Requirement 9.5). */
@@ -22,7 +24,11 @@ const WALNUT_DIVIDER = '#8B5E3C';
  *
  * _Requirements: 9.4, 9.5, 9.6, 9.7, 9.8, 9.9, 9.10, 9.11, 9.12_
  */
-export function WardrobeShelf({ category, onRequestPurchase }: WardrobeShelfProps) {
+export function WardrobeShelf({
+  category,
+  onRequestPurchase,
+  onInsufficientFunds,
+}: WardrobeShelfProps) {
   const ownerships = useAccessoryStore((s) => s.ownerships);
   const equipAccessory = useAccessoryStore((s) => s.equipAccessory);
   const coinBalance = useHabitStore((s) => s.coinBalance);
@@ -59,7 +65,7 @@ export function WardrobeShelf({ category, onRequestPurchase }: WardrobeShelfProp
       onRequestPurchase(accessory);
     } else {
       // Insufficient funds (Req 9.12).
-      Alert.alert('Not enough coins yet.');
+      onInsufficientFunds?.(accessory);
     }
   }
 

@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+﻿import { StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Svg, { Ellipse } from 'react-native-svg';
 
-import type { Accessory, GrowthStage } from '@/lib/types';
+import type { GrowthStage } from '@/lib/types';
 import Sprig from '@/components/sprig/Sprig';
+import { AccessoryArt } from '@/components/terrarium/AccessoryArt';
 import { useAccessoryStore } from '@/store/useAccessoryStore';
 import { ACCESSORIES } from '@/constants/accessories';
 
@@ -20,19 +20,17 @@ interface TerrariumSceneProps {
  * TerrariumScene — the layered interior of the terrarium.
  *
  * Layers are stacked with absolute-positioned Views in bottom→top order:
- *   1. SkyGradient       — soft sky-to-mint LinearGradient filling the scene
- *   2. TerrainAccessory  — equipped Terrain item (placeholder pill for now)
- *   3. GroundMound       — moss-green SVG ellipse at the bottom center
- *   4. FurnitureAccessory— equipped Furniture items, additive (placeholders)
- *   5. Sprig             — the creature, centered and sitting on the mound
- *   6. HatAccessory      — equipped Hat item near Sprig's head (placeholder)
+ *   1. SkyGradient        — soft off-white / mint background filling the scene
+ *   2. TerrainAccessory   — equipped Terrain item, wide on the ground
+ *   3. FurnitureAccessory — equipped Furniture items, additive, on the ground
+ *   4. Sprig (+ Hat)      — the creature with any equipped Hat on its head
  *
  * Equipped accessories are derived from the accessory store by cross-referencing
- * the static ACCESSORIES catalogue. Since accessory art doesn't exist yet, each
- * equipped accessory renders as a small labeled placeholder pill in the correct
- * layer — preserving the layering structure for later art integration.
+ * the static ACCESSORIES catalogue, and rendered as real SVG art via
+ * {@link AccessoryArt}: hats ride on the Sprig, furniture and terrain sit in
+ * the background.
  *
- * _Requirements: 7.3, 7.4, 7.12_
+ * _Requirements: 7.3, 7.4, 7.12, 9.10, 9.13, 9.14, 9.15_
  */
 export default function TerrariumScene({
   stage,
@@ -47,62 +45,63 @@ export default function TerrariumScene({
   const equippedFurniture = equipped.filter((a) => a.category === 'furniture');
   const equippedHats = equipped.filter((a) => a.category === 'hats');
 
+  // Accessory art sized relative to Sprig so the scene scales together.
+  const terrainSize = sprigSize * 1.15;
+  const furnitureSize = sprigSize * 0.5;
+  const hatSize = sprigSize * 0.55;
+
+  // The equipped hat (Hats are mutually exclusive, so at most one).
+  const hat = equippedHats[0];
+
   return (
     <View style={styles.container}>
-      {/* Layer 1: Sky gradient — fills the entire scene. */}
+      {/* Layer 1: Soft background — pale off-white to mint. */}
       <LinearGradient
-        colors={['#BFE3F5', '#E8F7EC']}
+        colors={['#F4FAF0', '#E8F3E0']}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
         style={StyleSheet.absoluteFill}
       />
 
-      {/* Layer 2: Terrain accessory slot — placeholders at ground level. */}
+      {/* Layer 2: Terrain accessory — wide, at ground level behind Sprig. */}
       <View style={styles.terrainLayer} pointerEvents="none">
         {equippedTerrain.map((accessory) => (
-          <AccessoryPlaceholder key={accessory.id} accessory={accessory} />
+          <AccessoryArt key={accessory.id} accessoryId={accessory.id} size={terrainSize} />
         ))}
       </View>
 
-      {/* Layer 3: Ground mound — moss-green ellipse at the bottom center. */}
-      <View style={styles.groundLayer} pointerEvents="none">
-        <Svg width="100%" height="100%" viewBox="0 0 100 40">
-          <Ellipse cx="50" cy="40" rx="55" ry="28" fill="#7CB342" />
-        </Svg>
-      </View>
-
-      {/* Layer 4: Furniture accessory slots — additive placeholders. */}
+      {/* Layer 3: Furniture accessories — additive, spread along the ground. */}
       <View style={styles.furnitureLayer} pointerEvents="none">
         {equippedFurniture.map((accessory) => (
-          <AccessoryPlaceholder key={accessory.id} accessory={accessory} />
+          <AccessoryArt key={accessory.id} accessoryId={accessory.id} size={furnitureSize} />
         ))}
       </View>
 
-      {/* Layer 5: Sprig — centered horizontally, sitting on the mound. */}
+      {/* Layer 4: Sprig with an equipped Hat resting on its head. */}
       <View style={styles.sprigLayer} pointerEvents="none">
-        <Sprig stage={stage} wilting={wilting} size={sprigSize} />
-      </View>
+        <View style={{ width: sprigSize, height: sprigSize }}>
+          <Sprig stage={stage} wilting={wilting} size={sprigSize} />
 
-      {/* Layer 6: Hat accessory slot — near Sprig's head. */}
-      <View style={styles.hatLayer} pointerEvents="none">
-        {equippedHats.map((accessory) => (
-          <AccessoryPlaceholder key={accessory.id} accessory={accessory} />
-        ))}
+          {hat ? (
+            <View
+              style={[
+                styles.hatSlot,
+                {
+                  width: hatSize,
+                  height: hatSize,
+                  // Center over the Sprig's head. In the Sprig viewBox the
+                  // body/head top sits near ~54% of the height, so anchoring
+                  // the hat's mid at ~50% crowns the head.
+                  left: (sprigSize - hatSize) / 2,
+                  top: sprigSize * 0.5 - hatSize / 2,
+                },
+              ]}
+            >
+              <AccessoryArt accessoryId={hat.id} size={hatSize} />
+            </View>
+          ) : null}
+        </View>
       </View>
-    </View>
-  );
-}
-
-/**
- * A small rounded pill labeled with an accessory name. Stands in for the
- * eventual accessory SVG art so the layered scene stays testable.
- */
-function AccessoryPlaceholder({ accessory }: { accessory: Accessory }) {
-  return (
-    <View style={styles.placeholder}>
-      <Text style={styles.placeholderText} numberOfLines={1}>
-        {accessory.name}
-      </Text>
     </View>
   );
 }
@@ -117,58 +116,33 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 0,
-    height: '30%',
+    bottom: '4%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingBottom: 8,
-    gap: 4,
-  },
-  groundLayer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: '25%',
   },
   furnitureLayer: {
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: '18%',
+    bottom: '10%',
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    gap: 6,
+    gap: 4,
     paddingHorizontal: 12,
   },
   sprigLayer: {
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: '20%',
+    bottom: '8%',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  hatLayer: {
+  hatSlot: {
     position: 'absolute',
-    left: 0,
-    right: 0,
-    top: '10%',
     alignItems: 'center',
-  },
-  placeholder: {
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: '#7CB342',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  placeholderText: {
-    fontSize: 12,
-    color: '#33691E',
-    fontWeight: '500',
+    justifyContent: 'center',
   },
 });
