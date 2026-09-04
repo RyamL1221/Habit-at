@@ -50,7 +50,7 @@ export function AccessoryItem({ accessory, state, coinBalance, onPress }: Access
         <Text style={[styles.name, isLocked && styles.nameLocked]} numberOfLines={1}>
           {accessory.name}
         </Text>
-        {isEquipped ? <Text style={styles.equippedTag}>Equipped</Text> : null}
+        {isEquipped ? <Text style={styles.equippedTag}>Equipped · tap to remove</Text> : null}
       </View>
 
       {isLocked ? (

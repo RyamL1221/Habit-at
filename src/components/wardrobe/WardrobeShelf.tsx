@@ -31,6 +31,7 @@ export function WardrobeShelf({
 }: WardrobeShelfProps) {
   const ownerships = useAccessoryStore((s) => s.ownerships);
   const equipAccessory = useAccessoryStore((s) => s.equipAccessory);
+  const unequipAccessory = useAccessoryStore((s) => s.unequipAccessory);
   const coinBalance = useHabitStore((s) => s.coinBalance);
 
   // Only render the accessories belonging to the active category (Req 9.4).
@@ -49,7 +50,8 @@ export function WardrobeShelf({
 
   function handlePress(accessory: Accessory, state: AccessoryState) {
     if (state === 'equipped') {
-      // Tapping an already-equipped accessory produces no state change (Req 9.6).
+      // Tapping an equipped accessory unequips it (removes it from the terrarium).
+      unequipAccessory(accessory.id);
       return;
     }
 

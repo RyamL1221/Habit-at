@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+﻿import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -20,6 +20,7 @@ export interface AccessoryState {
   ownerships: Record<string, AccessoryOwnership>;
   purchaseAccessory: (accessoryId: string) => void;
   equipAccessory: (accessoryId: string) => void;
+  unequipAccessory: (accessoryId: string) => void;
 }
 
 /**
@@ -51,7 +52,7 @@ export const useAccessoryStore = create<AccessoryState>()(
           return;
         }
 
-        // Guard: already owned — nothing to purchase.
+        // Guard: already owned â€” nothing to purchase.
         if (get().ownerships[accessoryId]?.owned) {
           return;
         }
@@ -103,6 +104,21 @@ export const useAccessoryStore = create<AccessoryState>()(
           return { ownerships };
         });
       },
+
+      unequipAccessory: (accessoryId: string) => {
+        // Guard: only owned + currently-equipped accessories can be unequipped.
+        const current = get().ownerships[accessoryId];
+        if (!current?.owned || !current.equipped) {
+          return;
+        }
+
+        set((state) => ({
+          ownerships: {
+            ...state.ownerships,
+            [accessoryId]: { ...current, equipped: false },
+          },
+        }));
+      },
     }),
     {
       name: 'habrite-accessory-store',
@@ -119,7 +135,7 @@ export const useAccessoryStore = create<AccessoryState>()(
  * Returns a new ownerships map with any conflicting equipped accessory in the
  * same exclusive category (Hats or Terrain) unequipped. Furniture is additive,
  * so no unequip happens for it. The target accessory itself is not modified
- * here — the caller sets its equipped state.
+ * here â€” the caller sets its equipped state.
  */
 function enforceEquip(
   ownerships: Record<string, AccessoryOwnership>,
@@ -132,7 +148,7 @@ function enforceEquip(
     return next;
   }
 
-  // Furniture is additive — no exclusivity enforcement (Requirement 9.14).
+  // Furniture is additive â€” no exclusivity enforcement (Requirement 9.14).
   if (accessory.category === 'furniture') {
     return next;
   }
